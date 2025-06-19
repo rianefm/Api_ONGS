@@ -1,82 +1,120 @@
-import { Ongs, listaOngs } from "../model/Ongs.model.js";
+import {
+    atualizarOngService,
+    buscarOngPorIdService,
+    criarOngService,
+    deletarOngService,
+    listarOngsPorEstadoService,
+    listarOngsPorServicoService,
+    listarOngsService
+} from '../service/ong.service.js';
 
+// Criar ONG
+export async function criarOng(req, res) {
+    const { nome, estado, servico } = req.body;
 
-//função para criar a ong 
-function criarOng(req, res) {
-
-    const { id, nome, estado, servico } = req.body;
-
-    if (!id || !nome || !estado || !servico) {
-        return res.status(400).json({ mensagem: "Todos os campos são obrigatórios (id, nome, estado, servico)" });
+    if (!nome || !estado || !servico) {
+        return res.status(400).json({ mensagem: 'Campos nome, estado e serviço são obrigatórios' });
     }
 
-    const novaOng = new Ongs(id, nome, estado, servico);
-
-    listaOngs.push(novaOng);
-
-    res.status(201).json(novaOng);
-
+    try {
+        const novaOng = await criarOngService({ nome, estado, servico });
+        res.status(201).json(novaOng);
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro ao criar ONG', error: error.message });
+    }
 }
 
-
-//função para buscar ongs pelo id
-function buscarOngID(req, res) {
+// Buscar por ID
+export async function buscarOngID(req, res) {
     const id = parseInt(req.params.id);
-    const ong = listaOngs.find(o => o.id === id);
 
-    if (ong) {
+    try {
+        const ong = await buscarOngPorIdService(id);
+        if (!ong) {
+            return res.status(404).json({ mensagem: 'ONG não encontrada' });
+        }
         res.json(ong);
-    } else {
-        res.status(404).json({ mensagem: 'ONG não encontrada' });
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro ao buscar ONG', error: error.message });
     }
 }
 
-
-//função para listar todas as ongs 
-function listarOngs(req, res) {
-    res.json(listaOngs);
+// Listar todas as ONGs
+export async function listarOngs(req, res) {
+    try {
+        const ongs = await listarOngsService();
+        res.json(ongs);
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro ao listar ONGs', error: error.message });
+    }
 }
 
-//função para listar ongs por estado 
-function getOngsPorEstado(req, res) {
-    const estado = req.params.uf.toLowerCase();
-    const ongsFiltradas = listaOngs.filter(ong => ong.estado.toLowerCase() === estado);
+// Filtrar ONGs por estado
+export async function getOngsPorEstado(req, res) {
+    const estado = req.params.uf;
 
-    if (ongsFiltradas.length === 0) {
-        return res.status(404).json({ mensagem: "Nenhuma ONG encontrada nesse estado" });
+    try {
+        const ongs = await listarOngsPorEstadoService(estado);
+        if (ongs.length === 0) {
+            return res.status(404).json({ mensagem: 'Nenhuma ONG encontrada nesse estado' });
+        }
+        res.json(ongs);
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro ao buscar ONGs por estado', error: error.message });
+    }
+}
+
+// Filtrar ONGs por serviço
+export async function servicoOferecidos(req, res) {
+    const tipoServico = req.params.tipo;
+
+    try {
+        const ongs = await listarOngsPorServicoService(tipoServico);
+        if (ongs.length === 0) {
+            return res.status(404).json({ mensagem: 'Nenhuma ONG encontrada com esse serviço' });
+        }
+        res.json(ongs);
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro ao buscar ONGs por serviço', error: error.message });
+    }
+}
+
+// Atualizar ONG
+export async function atualizarOng(req, res) {
+    const id = parseInt(req.params.id);
+    const { nome, estado, servico } = req.body;
+
+    if (!nome || !estado || !servico) {
+        return res.status(400).json({ mensagem: 'Campos nome, estado e serviço são obrigatórios para atualização' });
     }
 
-    res.json(ongsFiltradas);
-}
-
-//função para buscar as ongs por serviços oferecidos 
-function servicoOferecidos(req, res) {
-    const tipoServico = req.params.tipo.toLowerCase();
-    const ongsFiltradas = listaOngs.filter(ong => ong.servico.toLowerCase() === tipoServico);
-
-    if (ongsFiltradas.length === 0) {
-        return res.status(404).json({ mensagem: "Nenhuma ONG encontrada com esse tipo de serviço" });
+    try {
+        const ongAtualizada = await atualizarOngService(id, { nome, estado, servico });
+        res.json(ongAtualizada);
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro ao atualizar ONG', error: error.message });
     }
-
-    res.json(ongsFiltradas);
 }
 
+// Deletar ONG
+export async function deletarOng(req, res) {
+    const id = parseInt(req.params.id);
 
+    try {
+        await deletarOngService(id);
+        res.json({ mensagem: 'ONG deletada com sucesso' });
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro ao deletar ONG', error: error.message });
+    }
+}
 
-
-//exportando as funções criadas
+// Exportando todas as funções
 export default {
-    
     criarOng,
     listarOngs,
     buscarOngID,
     getOngsPorEstado,
-    servicoOferecidos
-
+    servicoOferecidos,
+    atualizarOng,
+    deletarOng
 };
-
-
-
-
-
-
