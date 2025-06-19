@@ -1,4 +1,5 @@
-import prisma from '../prisma/client.js';
+import prisma from '../../prisma/client.js';
+
 
 // Criar uma nova ONG
 export async function criarOngService(data) {
