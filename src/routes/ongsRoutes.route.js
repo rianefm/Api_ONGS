@@ -1,29 +1,23 @@
 import { Router } from "express";
-import OngController from "../controller/ongs.controller.js";  
+import OngController from "../controller/ongs.controller.js"; 
 
 const router = Router();
 
-// Rotas para ONGs
+// A rota para '/api/ongs' agora é simplesmente '/'
+router.get('/', OngController.listarOngs);
 
-// Listar todas as ONGs
-router.get('/ongs', OngController.listarOngs);
+// A rota para '/api/ongs/:id' agora é '/:id'
+router.get('/:id', OngController.buscarOngID);
 
-// Buscar ONG por ID
-router.get('/ongs/:id', OngController.buscarOngID);
+// A rota para '/api/ongs/estado/:uf' agora é '/estado/:uf'
+router.get('/estado/:uf', OngController.getOngsPorEstado);
 
-// Listar ONGs por estado
-router.get('/ongs/estado/:uf', OngController.getOngsPorEstado);
+// A rota para '/api/ongs/servico/:tipo' agora é '/servico/:tipo'
+router.get('/servico/:tipo', OngController.servicoOferecidos);
 
-// Listar ONGs por tipo de serviço
-router.get('/ongs/servico/:tipo', OngController.servicoOferecidos);
-
-// Criar nova ONG
-router.post('/ongs', OngController.criarOng);
-
-// Atualizar ONG por ID
-router.put('/ongs/:id', OngController.atualizarOng);
-
-// Deletar ONG por ID
-router.delete('/ongs/:id', OngController.deletarOng);
+// Rotas para criar, atualizar e deletar
+router.post('/', OngController.criarOng);
+router.put('/:id', OngController.atualizarOng);
+router.delete('/:id', OngController.deletarOng);
 
 export default router;

@@ -14,8 +14,10 @@ datasource db {
 }
 
 model Ong {
-  id      Int     @id @default(autoincrement())
-  nome    String
-  estado  String
-  servico String
+  id        Int      @id @default(autoincrement())
+  nome      String
+  descricao String?   // decrição das ongs
+  estado    String
+  servicos  String[] // array para obter mais serviços
+  contato   String?   // meio de o volutário conseguir se comunicar com a ong
 }

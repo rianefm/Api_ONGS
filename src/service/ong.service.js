@@ -36,9 +36,8 @@ export async function listarOngsPorEstadoService(estado) {
 export async function listarOngsPorServicoService(servico) {
     return await prisma.ong.findMany({
         where: {
-            servico: {
-                equals: servico,
-                mode: 'insensitive',
+            servicos: {
+                has: servico,
             },
         },
     });
