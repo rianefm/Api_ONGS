@@ -32,7 +32,7 @@ elo-social/
 │   ├── routes/         # Definição dos endpoints da API
 │   ├── services/       # Camada com a lógica de negócio e acesso ao banco
 │   └── server.js       # Arquivo principal de configuração do servidor
-├── .env                # Arquivo para variáveis de ambiente (NÃO ENVIAR AO GITHUB)
+├── .env                # Arquivo para variáveis de ambiente
 └── package.json
 ```
 
