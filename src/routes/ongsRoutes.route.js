@@ -3,6 +3,13 @@ import OngController from "../controller/ongs.controller.js";
 
 const router = Router();
 
+
+// Rota para listar ESTADOS únicos
+router.get('/lists/estados', OngController.listarEstados); 
+
+// Rota para listar SERVIÇOS únicos
+router.get('/lists/servicos', OngController.listarServicos); 
+
 // A rota para '/api/ongs' agora é simplesmente '/'
 router.get('/', OngController.listarOngs);
 

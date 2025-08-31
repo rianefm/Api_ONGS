@@ -1,5 +1,28 @@
 import prisma from '../../prisma/client.js';
 
+// Listar todos os ESTADOS únicos
+export async function listarEstadosService() {
+    const ongs = await prisma.ong.findMany({
+        select: {
+            estado: true,
+        },
+        distinct: ['estado'],
+    });
+    // Mapeia o resultado para um array de strings e ordena
+    return ongs.map(ong => ong.estado).sort();
+}
+
+// Listar todos os SERVIÇOS únicos
+export async function listarServicosService() {
+    const ongs = await prisma.ong.findMany({
+        select: {
+            servicos: true,
+        },
+    });
+
+    const todosOsServicos = ongs.flatMap(ong => ong.servicos);
+    return [...new Set(todosOsServicos)].sort();
+}
 
 // Criar uma nova ONG
 export async function criarOngService(data) {
