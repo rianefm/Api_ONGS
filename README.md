@@ -81,8 +81,9 @@ Após o passo 7, a API estará rodando em `http://localhost:3000`.
 - Buscar ONG por ID específico.
 - Filtrar ONGs por estado (UF).
 - Filtrar ONGs por tipo de serviço.
+
 ✅ **Modelo de Dados Robusto:** Suporte para que cada ONG possa ter múltiplos serviços.
-✅ **Boas Práricas:** Arquitetura dividida em camadas (rotas, controllers, serviços).
+✅ **Boas Práticas:** Arquitetura dividida em camadas (rotas, controllers, serviços).
 
 ---
 
